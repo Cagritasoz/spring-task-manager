@@ -7,12 +7,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class User {
+public class AuthenticatedUser {
 
-    private Long id;
-    private String username;
-    private String email;
-    private String password;
-    private Role role;
+    private User user;
+
+    private String jwt;
 
 }

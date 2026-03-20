@@ -1,17 +1,13 @@
 package com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api;
 
-import com.cagritasoz.taskmanager.domain.ports.inbound.TaskUseCase;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/v1/task")
+@RequestMapping("api/v1/tasks")
+@RequiredArgsConstructor
 public class TaskController {
 
-    private final TaskUseCase taskUseCase;
-
-    public TaskController(TaskUseCase taskUseCase) {
-        this.taskUseCase = taskUseCase;
-    }
 
 }
