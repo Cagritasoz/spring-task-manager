@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,16 +30,15 @@ public class UserController {
         return ResponseEntity.ok().build();
 
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
-    public ResponseEntity<EntityModel<UserResponse>> getUser(@PathVariable Long id) {
+    public ResponseEntity<UserResponse> getUser(@PathVariable Long id) {
 
-        return ResponseEntity.ok().build();
+        UserResponse userResponse = findUserEndpointAdapter.getUser(id);
 
+        return ResponseEntity.ok(userResponse);
 
     }
-
-
 
 
 }

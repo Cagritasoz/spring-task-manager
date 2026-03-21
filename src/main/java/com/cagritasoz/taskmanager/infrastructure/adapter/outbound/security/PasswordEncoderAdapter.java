@@ -11,7 +11,6 @@ public class PasswordEncoderAdapter implements PasswordEncoderPort {
 
     private final PasswordEncoder passwordEncoder;
 
-
     @Override
     public String encodePassword(String password) {
 

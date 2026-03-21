@@ -1,6 +1,5 @@
 package com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.dto.response;
 
-import com.cagritasoz.taskmanager.domain.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,14 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponse {
+public class JwtResponse {
 
-    private Long id;
-
-    private String username;
-
-    private String email;
-
-    private Role role;
+    private String jwt;
 
 }

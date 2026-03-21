@@ -2,6 +2,7 @@ package com.cagritasoz.taskmanager.infrastructure.config;
 
 import com.cagritasoz.taskmanager.application.ports.outbound.ReadUserPort;
 import com.cagritasoz.taskmanager.domain.exception.UsernameNotFoundException;
+import com.cagritasoz.taskmanager.infrastructure.adapter.outbound.security.SecurityUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

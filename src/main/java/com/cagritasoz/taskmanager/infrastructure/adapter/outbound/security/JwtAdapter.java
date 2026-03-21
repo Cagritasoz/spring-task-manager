@@ -3,7 +3,6 @@ package com.cagritasoz.taskmanager.infrastructure.adapter.outbound.security;
 import com.cagritasoz.taskmanager.application.ports.outbound.JwtPort;
 import com.cagritasoz.taskmanager.domain.model.User;
 import com.cagritasoz.taskmanager.infrastructure.config.JwtUtils;
-import com.cagritasoz.taskmanager.infrastructure.config.SecurityUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

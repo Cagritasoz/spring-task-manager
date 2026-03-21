@@ -2,8 +2,8 @@ package com.cagritasoz.taskmanager.application.ports.outbound;
 
 import com.cagritasoz.taskmanager.domain.model.User;
 
-public interface AuthManagerPort {
+public interface CurrentUserPort {
 
-    User authenticate(String email, String password);
+    User getCurrentUser();
 
 }
