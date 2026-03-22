@@ -1,19 +1,17 @@
 package com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api;
 
-import com.cagritasoz.taskmanager.domain.model.JwtUser;
 import com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.dto.request.LoginRequest;
 import com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.dto.request.RegisterRequest;
 import com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.dto.response.AuthResponse;
-import com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.dto.response.UserResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -27,7 +25,9 @@ public class AuthController {
 
         AuthResponse authResponse = authControllerAdapter.registerUser(registerRequest);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(authResponse); //add links
+        URI location = authResponse.getUserResponse().getRequiredLink("self").toUri();
+
+        return ResponseEntity.created(location).body(authResponse);
 
     }
 
@@ -35,7 +35,7 @@ public class AuthController {
     public ResponseEntity<AuthResponse> login(@RequestBody @Valid LoginRequest loginRequest) {
 
         AuthResponse authResponse = authControllerAdapter.loginUser(loginRequest);
-        //add links
+
         return ResponseEntity.ok(authResponse);
 
     }

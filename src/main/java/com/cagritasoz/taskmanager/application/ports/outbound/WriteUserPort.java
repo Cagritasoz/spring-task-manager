@@ -6,4 +6,5 @@ public interface WriteUserPort {
 
     User saveUser(User user);
 
+
 }

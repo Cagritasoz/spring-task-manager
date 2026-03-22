@@ -19,13 +19,13 @@ public class TaskEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title", nullable = false, length = 70)
+    @Column(nullable = false, length = 70)
     private String title;
 
-    @Column(name = "description", nullable = false, length = 300)
+    @Column(nullable = false, length = 300)
     private String description;
 
-    @Column(name = "due_date", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime dueDate;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
