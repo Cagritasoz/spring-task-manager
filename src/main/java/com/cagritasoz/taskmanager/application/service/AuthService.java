@@ -39,7 +39,7 @@ public class AuthService implements AuthUseCase {
 
         if(readUserPort.existsByEmail(user.getEmail())) {
 
-            throw new EmailAlreadyExistsException("Email exists");
+            throw new EmailAlreadyExistsException();
 
         }
 

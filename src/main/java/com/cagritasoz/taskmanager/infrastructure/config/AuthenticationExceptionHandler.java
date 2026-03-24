@@ -12,7 +12,6 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Slf4j
@@ -27,8 +26,8 @@ public class AuthenticationExceptionHandler implements AuthenticationEntryPoint 
                          HttpServletResponse response,
                          AuthenticationException authException) throws IOException, ServletException {
 
-        log.warn("Unauthorized request. Reason: {}, IP: {}, URI: {}",
-                authException.getMessage(), request.getRemoteAddr(), request.getRequestURI());
+        log.warn("Unauthorized request. Reason: {}, URI: {}",
+                authException.getMessage(), request.getRequestURI()); //Exceptions come here from FilterSecurityInterceptor. Method security.
 
         ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(),
                 401,
@@ -40,7 +39,8 @@ public class AuthenticationExceptionHandler implements AuthenticationEntryPoint 
         String json = objectMapper.writeValueAsString(errorResponse);
 
         response.getWriter().write(json);
-        response.getWriter().flush(); //flush the buffer
+        response.getWriter().flush();
+        response.getWriter().close();
 
     }
 }

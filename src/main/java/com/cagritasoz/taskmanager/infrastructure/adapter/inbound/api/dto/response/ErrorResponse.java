@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class ErrorResponse {
 
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    private LocalDateTime localDateTime;
+    private LocalDateTime timestamp;
 
     private int status;
     private String errorMessage;

@@ -24,7 +24,7 @@ public class CreateUserService implements CreateUserUseCase {
 
         if(readUserPort.existsByEmail(user.getEmail())) {
 
-            throw new EmailAlreadyExistsException("Email " + user.getEmail() + " already exists!");
+            throw new EmailAlreadyExistsException();
 
         }
 

@@ -41,7 +41,7 @@ public class JwtUtils { //A JWT Token consists of HEADER.PAYLOAD(CLAIMS).SIGNATU
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 5 * 60 * 1000)) //Expires after 5 minutes!
+                .setExpiration(new Date(System.currentTimeMillis() + 24 * 60 * 1000)) //Expires after 1 day!
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
 
@@ -67,7 +67,7 @@ public class JwtUtils { //A JWT Token consists of HEADER.PAYLOAD(CLAIMS).SIGNATU
 
     }
 
-    private Claims extractAllClaims(String token) { //.parseClaimsJws is where an jwt related exception can occur.
+    private Claims extractAllClaims(String token) { //.parseClaimsJws is where JWT related exception can occur.
 
         return Jwts
                 .parserBuilder() //Create a builder for a JWT parser.

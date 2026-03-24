@@ -9,10 +9,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -29,16 +29,32 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
 
     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+        return path.startsWith("/api/v1/auth/"); //Do not run for public rest endpoints. Ignore jwt even if sent.
+    }
+
+    /*
+    -By default, in modern Spring Security (since Spring Boot 3.0),
+    the security filter chain does run again for a forwarded request to /error.
+
+    -A request is forwarded to /error when an exception occurs and is then unhandled so not caught.
+     */
+
+    @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
 
+        log.info("Jwt authentication attempt.");
+
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
-        String email = null; //We use the email as the username in the jwt token!
+        final String email; //We use the email as the username in the jwt token!
 
         if(authHeader == null || !authHeader.startsWith("Bearer ")) { //No JWT sent.
 
+            log.warn("No JWT sent with request.");
             filterChain.doFilter(request, response); //Forward the request to the next filter.
             return; //Stop the execution of this filter. Rest of the code is not ran after forwarding request.
 
@@ -50,9 +66,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             email = jwtUtils.extractUsername(jwt);
 
-            if(email != null && SecurityContextHolder.getContext().getAuthentication() == null) { //null means user is not authenticated yet.
+            log.info("Jwt authentication attempt. Email: {} ", email);
+
+            log.info("Current authentication in context: {}", SecurityContextHolder.getContext().getAuthentication());
+
+            if(email != null && SecurityContextHolder.getContext().getAuthentication() == null) { //null means no authentication has been set yet.
 
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(email);
+
+                log.info("LoadUserByUsername method did not throw any exception.");
 
                 if(jwtUtils.isTokenValid(jwt, userDetails)) {
 
@@ -68,33 +90,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                     SecurityContextHolder.getContext().setAuthentication(authToken);
 
-                    log.info("JWT authentication successful. Email: {}, IP: {}, URI: {}",
-                            email, request.getRemoteAddr(), request.getRequestURI());
+                    log.info("JWT authentication successful. Email: {}, URI: {}",
+                            email, request.getRequestURI());
 
                 }
             }
 
         }
 
-        catch (AuthenticationException e) {
-
-            SecurityContextHolder.clearContext(); //clear context
-
-            log.warn("JWT authentication failed - user not found. Email: {}, IP: {}, URI: {}",
-                        email, request.getRemoteAddr(), request.getRequestURI());
-
-            throw new JwtAuthenticationException("Authorization failed");
-
-        }
-
-        catch (JwtException e) {
+        catch (JwtException | UsernameNotFoundException e) {
 
             SecurityContextHolder.clearContext();
 
-            log.warn("JWT authentication failed. Reason: {}, IP: {}, URI: {}",
-                    e.getMessage(), request.getRemoteAddr(), request.getRequestURI());
+            log.warn("JWT authentication failed. Reason: {}, URI: {}",
+                    e.getMessage(), request.getRequestURI());
 
-            throw new JwtAuthenticationException("Authorization failed");
+            //If we use return keyword here, request is not forwarded. Method security fails.
 
         }
 

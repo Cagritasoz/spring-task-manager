@@ -26,8 +26,8 @@ public class AccessDeniedExceptionHandler implements AccessDeniedHandler {
                        HttpServletResponse response,
                        AccessDeniedException accessDeniedException) throws IOException, ServletException {
 
-        log.warn("Access denied for request. Reason: {}, IP: {}, URI: {}",
-                accessDeniedException.getMessage(), request.getRemoteAddr(), request.getRequestURI());
+        log.warn("Access denied for request. Reason: {}, URI: {}",
+                accessDeniedException.getMessage(), request.getRequestURI()); //Exceptions come here from FilterSecurityInterceptor. Method security.
 
         ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(),
                 403,
@@ -40,5 +40,6 @@ public class AccessDeniedExceptionHandler implements AccessDeniedHandler {
 
         response.getWriter().write(json);
         response.getWriter().flush(); //flush the buffer
+        response.getWriter().close();
     }
 }
