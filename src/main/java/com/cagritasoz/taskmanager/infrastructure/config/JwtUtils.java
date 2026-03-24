@@ -67,7 +67,7 @@ public class JwtUtils { //A JWT Token consists of HEADER.PAYLOAD(CLAIMS).SIGNATU
 
     }
 
-    private Claims extractAllClaims(String token) {
+    private Claims extractAllClaims(String token) { //.parseClaimsJws is where an jwt related exception can occur.
 
         return Jwts
                 .parserBuilder() //Create a builder for a JWT parser.

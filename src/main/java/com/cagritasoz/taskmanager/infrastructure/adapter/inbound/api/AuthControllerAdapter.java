@@ -2,8 +2,8 @@ package com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api;
 
 
 import com.cagritasoz.taskmanager.application.ports.inbound.AuthUseCase;
-import com.cagritasoz.taskmanager.domain.model.JwtUser;
-import com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.assembler.UserModelAssembler;
+import com.cagritasoz.taskmanager.domain.model.UserWithToken;
+import com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.assembler.UserEntityModelAssembler;
 import com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.dto.request.LoginRequest;
 import com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.dto.request.RegisterRequest;
 import com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.dto.response.AuthResponse;
@@ -19,7 +19,7 @@ public class AuthControllerAdapter {
 
     private final AuthUseCase authUseCase;
 
-    private final UserModelAssembler userModelAssembler;
+    private final UserEntityModelAssembler userEntityModelAssembler;
 
     private final UserDtoToDomainMapper userDtoToDomainMapper;
 
@@ -27,21 +27,23 @@ public class AuthControllerAdapter {
 
     public AuthResponse registerUser(RegisterRequest registerRequest) {
 
-        JwtUser jwtUser = authUseCase.registerUser(userDtoToDomainMapper.toDomainModel(registerRequest));
+        UserWithToken userWithToken = authUseCase.registerUser(userDtoToDomainMapper.toDomainModel(registerRequest));
 
-        return new AuthResponse(userModelAssembler
-                .toModel(userDomainToDtoMapper.toDtoModel(jwtUser.getUser())),
-                new JwtResponse(jwtUser.getJwt()));
+        return new AuthResponse(userEntityModelAssembler
+                .toModel(userDomainToDtoMapper
+                        .toDtoModel(userWithToken.getUser())),
+                new JwtResponse(userWithToken.getJwt()));
 
     }
 
     public AuthResponse loginUser(LoginRequest loginRequest) {
 
-        JwtUser jwtUser = authUseCase.loginUser(loginRequest.getEmail(), loginRequest.getPassword());
+        UserWithToken userWithToken = authUseCase.loginUser(loginRequest.getEmail(), loginRequest.getPassword());
 
-        return new AuthResponse(userModelAssembler
-                .toModel(userDomainToDtoMapper.toDtoModel(jwtUser.getUser())),
-                new JwtResponse(jwtUser.getJwt()));
+        return new AuthResponse(userEntityModelAssembler
+                .toModel(userDomainToDtoMapper
+                        .toDtoModel(userWithToken.getUser())),
+                new JwtResponse(userWithToken.getJwt()));
 
     }
 

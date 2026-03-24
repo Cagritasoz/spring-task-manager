@@ -2,6 +2,7 @@ package com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api;
 
 
 import com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.dto.request.CreateUserRequest;
+import com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.dto.request.UpdateUserRequest;
 import com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.dto.response.UserResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class UserController {
 
     private final ChangeUserEndpointAdapter changeUserEndpointAdapter;
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')") //FilterSecurityInterceptor works here. See SecurityConfig class for explanation.
     @PostMapping
     public ResponseEntity<EntityModel<UserResponse>> createUser(@RequestBody @Valid CreateUserRequest createUserRequest) { //Admin only!
 
@@ -60,6 +61,17 @@ public class UserController {
 
         return ResponseEntity.ok(pagedModel);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateUser(@PathVariable Long id,
+                                           @RequestBody @Valid UpdateUserRequest updateUserRequest) {
+
+        return ResponseEntity.ok().build();
+
+
+    }
+
+
 
 
 

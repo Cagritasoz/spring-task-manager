@@ -1,7 +1,7 @@
 package com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.mapper;
 
-import com.cagritasoz.taskmanager.domain.model.JwtUser;
 import com.cagritasoz.taskmanager.domain.model.User;
+import com.cagritasoz.taskmanager.domain.model.UserWithToken;
 import com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.dto.response.UserResponse;
 import org.springframework.stereotype.Component;
 
@@ -10,9 +10,9 @@ import java.util.List;
 @Component
 public class UserDomainToDtoMapper {
 
-    public UserResponse toDtoModel(JwtUser jwtUser) {
+    public UserResponse toDtoModel(UserWithToken userWithToken) {
 
-        User user = jwtUser.getUser();
+        User user = userWithToken.getUser();
 
         return new UserResponse(user.getId(),
                 user.getUsername(),

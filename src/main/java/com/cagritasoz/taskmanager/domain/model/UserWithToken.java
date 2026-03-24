@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class JwtUser {
+public class UserWithToken {
 
     private User user;
 

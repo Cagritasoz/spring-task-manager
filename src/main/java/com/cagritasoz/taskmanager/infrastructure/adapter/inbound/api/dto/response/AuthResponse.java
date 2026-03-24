@@ -13,14 +13,14 @@ import org.springframework.hateoas.EntityModel;
 @AllArgsConstructor
 public class AuthResponse {
 
-    private EntityModel<UserResponse> userResponse;
+    private EntityModel<UserResponse> user;
 
     private JwtResponse jwtResponse;
 
     @JsonIgnore
     public UserResponse getContent() {
 
-        return userResponse.getContent();
+        return user.getContent();
 
     }
 

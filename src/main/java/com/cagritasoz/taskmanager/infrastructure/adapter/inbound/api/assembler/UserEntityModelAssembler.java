@@ -13,7 +13,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 @RequiredArgsConstructor
-public class UserModelAssembler implements RepresentationModelAssembler<UserResponse, EntityModel<UserResponse>> {
+public class UserEntityModelAssembler implements RepresentationModelAssembler<UserResponse, EntityModel<UserResponse>> {
 
     @Override
     public @NonNull EntityModel<UserResponse> toModel(@NonNull UserResponse userResponse) {

@@ -1,12 +1,12 @@
 package com.cagritasoz.taskmanager.application.ports.inbound;
 
-import com.cagritasoz.taskmanager.domain.model.JwtUser;
 import com.cagritasoz.taskmanager.domain.model.User;
+import com.cagritasoz.taskmanager.domain.model.UserWithToken;
 
 public interface AuthUseCase {
 
-    JwtUser loginUser(String email, String password);
+    UserWithToken loginUser(String email, String password);
 
-    JwtUser registerUser(User user);
+    UserWithToken registerUser(User user);
 
 }

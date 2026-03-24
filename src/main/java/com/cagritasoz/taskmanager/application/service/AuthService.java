@@ -3,9 +3,9 @@ package com.cagritasoz.taskmanager.application.service;
 import com.cagritasoz.taskmanager.application.ports.inbound.AuthUseCase;
 import com.cagritasoz.taskmanager.application.ports.outbound.*;
 import com.cagritasoz.taskmanager.domain.exception.EmailAlreadyExistsException;
-import com.cagritasoz.taskmanager.domain.model.JwtUser;
 import com.cagritasoz.taskmanager.domain.model.Role;
 import com.cagritasoz.taskmanager.domain.model.User;
+import com.cagritasoz.taskmanager.domain.model.UserWithToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,20 +26,20 @@ public class AuthService implements AuthUseCase {
 
 
     @Override
-    public JwtUser loginUser(String email, String password) {
+    public UserWithToken loginUser(String email, String password) {
 
         User authenticatedUser = authManagerPort.authenticate(email, password);
 
-        return new JwtUser(authenticatedUser, generateToken(authenticatedUser));
+        return new UserWithToken(authenticatedUser, generateToken(authenticatedUser));
 
     }
 
     @Override
-    public JwtUser registerUser(User user) {
+    public UserWithToken registerUser(User user) {
 
         if(readUserPort.existsByEmail(user.getEmail())) {
 
-            throw new EmailAlreadyExistsException("Email " + user.getEmail() + " exists!");
+            throw new EmailAlreadyExistsException("Email exists");
 
         }
 
@@ -48,7 +48,7 @@ public class AuthService implements AuthUseCase {
 
         User savedUser = writeUserPort.saveUser(user);
 
-        return new JwtUser(savedUser, generateToken(savedUser));
+        return new UserWithToken(savedUser, generateToken(savedUser));
 
     }
 

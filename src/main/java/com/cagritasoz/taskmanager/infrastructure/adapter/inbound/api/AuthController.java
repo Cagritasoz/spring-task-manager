@@ -25,7 +25,7 @@ public class AuthController {
 
         AuthResponse authResponse = authControllerAdapter.registerUser(registerRequest);
 
-        URI location = authResponse.getUserResponse().getRequiredLink("self").toUri();
+        URI location = authResponse.getUser().getRequiredLink("self").toUri();
 
         return ResponseEntity.created(location).body(authResponse);
 

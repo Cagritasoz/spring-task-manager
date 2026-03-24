@@ -23,7 +23,7 @@ public class UserPagedModelAssembler implements RepresentationModelAssembler<Pag
 
     private final UserDomainToDtoMapper userDomainToDtoMapper;
 
-    private final UserModelAssembler userModelAssembler;
+    private final UserEntityModelAssembler userEntityModelAssembler;
 
     private final PagedResourcesAssembler<UserResponse> pagedResourcesAssembler;
 
@@ -38,7 +38,7 @@ public class UserPagedModelAssembler implements RepresentationModelAssembler<Pag
                 pageable,
                 pagination.getTotalElements());
 
-        return pagedResourcesAssembler.toModel(page, userModelAssembler);
+        return pagedResourcesAssembler.toModel(page, userEntityModelAssembler);
 
     }
 
