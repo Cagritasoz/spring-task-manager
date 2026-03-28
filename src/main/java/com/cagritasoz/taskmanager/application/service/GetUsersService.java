@@ -1,7 +1,10 @@
 package com.cagritasoz.taskmanager.application.service;
 
 import com.cagritasoz.taskmanager.application.ports.inbound.GetUsersUseCase;
+import com.cagritasoz.taskmanager.application.ports.outbound.CurrentUserPort;
 import com.cagritasoz.taskmanager.application.ports.outbound.ReadUserPort;
+import com.cagritasoz.taskmanager.application.service.handler.UserReadHandler;
+import com.cagritasoz.taskmanager.domain.model.Action;
 import com.cagritasoz.taskmanager.domain.model.Pagination;
 import com.cagritasoz.taskmanager.domain.model.User;
 import lombok.RequiredArgsConstructor;
@@ -11,12 +14,28 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class GetUsersService implements GetUsersUseCase {
 
+    private final CurrentUserPort currentUserPort;
+
     private final ReadUserPort readUserPort;
+
+    private final UserReadHandler readHandler;
+
+    private final Action action = Action.VIEW_LIST;
 
     @Override
     public Pagination<User> getUsers(Pagination<User> pagination) {
 
-        return readUserPort.findAll(pagination);
+        User currentUser = currentUserPort.getCurrentUser();
+
+        UserReadHandler.ReadUsersContext context = readHandler.createContext(currentUser);
+
+        readHandler.logListRetrievalAttempt(context, action);
+
+        Pagination<User> usersPaginated = readUserPort.findAll(pagination);
+
+        readHandler.logListRetrievalSuccess(context, action);
+
+        return usersPaginated;
 
     }
 }

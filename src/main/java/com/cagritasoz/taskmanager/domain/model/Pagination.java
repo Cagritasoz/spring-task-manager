@@ -12,10 +12,15 @@ import java.util.List;
 public class Pagination<T> {
 
     private List<T> content; //Page
+
     int pageNumber; //Page, Pageable
+
     int size; //Page, Pageable
+
     List<SortField> sortFields; //Pageable
+
     long totalElements; //Page
+
     long totalPages;//Page
 
 

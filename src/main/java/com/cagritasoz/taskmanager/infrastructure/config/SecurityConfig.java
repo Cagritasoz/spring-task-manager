@@ -3,7 +3,6 @@ package com.cagritasoz.taskmanager.infrastructure.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -248,4 +247,12 @@ has sufficient roles/permissions for the requested URL or method (@PreAuthorize)
     - Matches Spring Security design
 
 */
+
+/*
+-/error path is protected by default. If an exception occurs and is not caught request gets forwarded to /error.
+If an exception is thrown at this point in my code it is likely thrown in the security layer or validation layer.
+My authentication fails for /error path even if jwt succeeds. This causes an AuthenticationException therefore commence
+method is called.
+
+ */
 

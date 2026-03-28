@@ -1,6 +1,6 @@
 package com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api;
 
-import com.cagritasoz.taskmanager.application.ports.inbound.GetUserCase;
+import com.cagritasoz.taskmanager.application.ports.inbound.GetUserUseCase;
 import com.cagritasoz.taskmanager.application.ports.inbound.GetUsersUseCase;
 import com.cagritasoz.taskmanager.domain.model.Pagination;
 import com.cagritasoz.taskmanager.domain.model.User;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class FindUserEndpointAdapter {
 
-    private final GetUserCase getUserCase;
+    private final GetUserUseCase getUserUseCase;
 
     private final GetUsersUseCase getUsersUseCase;
 
@@ -34,7 +34,7 @@ public class FindUserEndpointAdapter {
 
     public EntityModel<UserResponse> getUser(Long id) {
 
-        User user = getUserCase.getUser(id);
+        User user = getUserUseCase.getUser(id);
 
         return userEntityModelAssembler.toModel(userDomainToDtoMapper.toDtoModel(user));
 

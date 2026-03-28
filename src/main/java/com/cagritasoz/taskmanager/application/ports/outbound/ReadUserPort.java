@@ -13,6 +13,8 @@ public interface ReadUserPort {
 
     Optional<User> findByEmail(String email);
 
+    boolean existsById(Long id);
+
     boolean existsByEmail(String email);
 
 

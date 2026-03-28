@@ -3,6 +3,7 @@ package com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.dto.reques
 import com.cagritasoz.taskmanager.domain.model.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,5 +27,6 @@ public class UpdateUserRequest {
     @NotBlank
     private String password;
 
-    private Role role;
+    @NotNull
+    private Role role; //Allow only for admins to change role. Ignore if a user tries to set their role as ADMIN.
 }

@@ -6,6 +6,7 @@ package com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.mapper;
 import com.cagritasoz.taskmanager.domain.model.User;
 import com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.dto.request.CreateUserRequest;
 import com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.dto.request.RegisterRequest;
+import com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.dto.request.UpdateUserRequest;
 import org.springframework.stereotype.Component;
 
 
@@ -30,6 +31,16 @@ public class UserDtoToDomainMapper {
                 createUserRequest.getEmail(),
                 createUserRequest.getPassword(),
                 createUserRequest.getRole()); //admin can set the role!
+
+    }
+
+    public User toDomainModel(UpdateUserRequest updateUserRequest) {
+
+        return new User(null,
+                updateUserRequest.getUsername(),
+                updateUserRequest.getEmail(),
+                updateUserRequest.getPassword(),
+                updateUserRequest.getRole());
 
     }
 

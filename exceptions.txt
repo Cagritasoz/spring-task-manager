@@ -1,3 +1,4 @@
 MalformedJwtException
 SignatureException
 ExpiredJwtException
+MethodArgumentNotValidException

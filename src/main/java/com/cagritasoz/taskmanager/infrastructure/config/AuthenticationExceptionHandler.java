@@ -31,7 +31,8 @@ public class AuthenticationExceptionHandler implements AuthenticationEntryPoint 
 
         ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(),
                 401,
-                "Unauthorized");
+                "Unauthorized",
+                "Authentication is required.");
 
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json");

@@ -31,7 +31,8 @@ public class AccessDeniedExceptionHandler implements AccessDeniedHandler {
 
         ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(),
                 403,
-                "Access Denied");
+                "Forbidden",
+                "Not allowed to access resource.");
 
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.setContentType("application/json");

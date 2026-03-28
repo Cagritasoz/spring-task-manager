@@ -62,12 +62,25 @@ public class UserController {
         return ResponseEntity.ok(pagedModel);
     }
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateUser(@PathVariable Long id,
+    public ResponseEntity<EntityModel<UserResponse>> updateUser(@PathVariable Long id,
                                            @RequestBody @Valid UpdateUserRequest updateUserRequest) {
 
-        return ResponseEntity.ok().build();
+        EntityModel<UserResponse> userResponseEntityModel = changeUserEndpointAdapter.updateUser(id, updateUserRequest);
 
+        return ResponseEntity.ok(userResponseEntityModel);
+
+
+    }
+
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+
+        changeUserEndpointAdapter.deleteUser(id);
+
+        return ResponseEntity.noContent().build();
 
     }
 

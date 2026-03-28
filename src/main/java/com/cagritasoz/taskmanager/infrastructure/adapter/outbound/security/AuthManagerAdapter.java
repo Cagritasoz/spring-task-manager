@@ -25,7 +25,8 @@ public class AuthManagerAdapter implements AuthManagerPort {
 
             log.info("Login attempt. Email: {}", email); //{} is a placeholder.
 
-            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(email,
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                    new UsernamePasswordAuthenticationToken(email,
                     password);
 
             Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
@@ -40,7 +41,7 @@ public class AuthManagerAdapter implements AuthManagerPort {
 
             log.info("Login failed. Reason: {}", e.getMessage());
 
-            throw new BadCredentialsException();
+            throw new BadCredentialsException(); //Throw domain exception
 
         }
     }

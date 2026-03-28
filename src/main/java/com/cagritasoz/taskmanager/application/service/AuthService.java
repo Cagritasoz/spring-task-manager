@@ -24,6 +24,8 @@ public class AuthService implements AuthUseCase {
 
     private final WriteUserPort writeUserPort;
 
+    private final LoggerPort loggerPort;
+
 
     @Override
     public UserWithToken loginUser(String email, String password) {
@@ -37,7 +39,15 @@ public class AuthService implements AuthUseCase {
     @Override
     public UserWithToken registerUser(User user) {
 
-        if(readUserPort.existsByEmail(user.getEmail())) {
+        String newUserEmail = user.getEmail();
+
+        loggerPort.logInfo("Register attempt. Email: {}",
+                newUserEmail);
+
+        if(readUserPort.existsByEmail(newUserEmail)) {
+
+            loggerPort.logWarn("Register failed. Email: {}",
+                    newUserEmail);
 
             throw new EmailAlreadyExistsException();
 
@@ -48,11 +58,17 @@ public class AuthService implements AuthUseCase {
 
         User savedUser = writeUserPort.saveUser(user);
 
+        loggerPort.logInfo("Register successful. Email: {}",
+                newUserEmail);
+
         return new UserWithToken(savedUser, generateToken(savedUser));
 
     }
 
     private String generateToken(User user) {
+
+        loggerPort.logInfo("Generating JWT token. Email: {}",
+                user.getEmail());
 
         return jwtPort.generateToken(user);
 

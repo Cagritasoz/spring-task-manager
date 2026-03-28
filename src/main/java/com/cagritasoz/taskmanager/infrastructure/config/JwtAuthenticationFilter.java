@@ -74,7 +74,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(email);
 
-                log.info("LoadUserByUsername method did not throw any exception.");
+                log.info("User found successfully.");
 
                 if(jwtUtils.isTokenValid(jwt, userDetails)) {
 

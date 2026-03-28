@@ -8,6 +8,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 public class WriteUserAdapter implements WriteUserPort {
@@ -26,4 +28,37 @@ public class WriteUserAdapter implements WriteUserPort {
 
 
     }
+
+    @Override
+    @Transactional
+    public User updateUser(Long id, User user) {
+
+        Optional<UserEntity> userEntityOptional = userJpaRepository.findById(id);
+
+        userEntityOptional.ifPresent(userEntity -> {
+
+            userEntity.setUsername(user.getUsername());
+            userEntity.setEmail(user.getEmail());
+            userEntity.setPassword(user.getPassword());
+            userEntity.setRole(user.getRole());
+
+        });
+
+        return userEntityOptional.map(userJpaMapper::toDomainModel)
+                .orElse(null); //Service ensures that a null value is never returned.
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(Long id) {
+
+        userJpaRepository.deleteById(id);
+
+    }
 }
+
+/*
+Hibernate keeps a snapshot of your entity when it is loaded.
+At flush/commit time, it compares the current object with the snapshot.
+If something changed → the entity is “dirty” → UPDATE query is generated automatically.
+ */

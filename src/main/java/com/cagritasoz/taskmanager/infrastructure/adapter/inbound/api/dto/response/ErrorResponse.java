@@ -16,7 +16,10 @@ public class ErrorResponse {
     private LocalDateTime timestamp;
 
     private int status;
-    private String errorMessage;
+
+    private String error;
+
+    private String message;
 
 }
 
