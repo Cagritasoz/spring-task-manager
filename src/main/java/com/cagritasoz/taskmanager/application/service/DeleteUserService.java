@@ -25,19 +25,19 @@ public class DeleteUserService implements DeleteUserUseCase {
 
     private final UserModificationHandler modificationHandler;
 
-    private final Action action = Action.DELETE;
+    private static final Action action = Action.DELETE;
 
     @Override
-    public void deleteUser(Long id) {
+    public void deleteUser(Long targetUserId) {
 
         User currentUser = currentUserPort.getCurrentUser();
 
         UserModificationHandler.ModifyUserContext context =  modificationHandler
-                .createContext(currentUser, id);
+                .createContext(currentUser, targetUserId);
 
         modificationHandler.logAttempt(context, action);
 
-        boolean canAccess = currentUser.getRole() == Role.ADMIN || currentUser.getId().equals(id);
+        boolean canAccess = currentUser.getRole() == Role.ADMIN || currentUser.getId().equals(targetUserId);
 
         if(!canAccess) {
 
@@ -45,7 +45,7 @@ public class DeleteUserService implements DeleteUserUseCase {
 
             throw new ForbiddenException();
 
-        } else if (!readUserPort.existsById(id)) {
+        } else if (!readUserPort.existsById(targetUserId)) {
 
             modificationHandler.logUserNotFound(context, action);
 
@@ -55,7 +55,7 @@ public class DeleteUserService implements DeleteUserUseCase {
 
         modificationHandler.logAccessGranted(context, action);
 
-        writeUserPort.deleteUser(id);
+        writeUserPort.deleteUser(targetUserId);
 
         modificationHandler.logSuccess(context, action);
 

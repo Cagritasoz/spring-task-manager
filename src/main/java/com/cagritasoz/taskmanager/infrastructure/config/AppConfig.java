@@ -63,7 +63,7 @@ public class AppConfig {
 
         //mask UsernameNotFoundException as a BadCredentialsException. No one can check if an email exists in the system.
         authProvider.setHideUserNotFoundExceptions(true);
-
+        //Makes it so that my log can not identify a user not found though.
         authProvider.setPasswordEncoder(passwordEncoder);
 
         return authProvider;

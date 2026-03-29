@@ -8,6 +8,7 @@ import java.util.Optional;
 public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
 
     //Automatically builds the query. We just write the proper method name here, and it is provided as a method.
+    //Uses an entity manager internally.
 
     Optional<UserEntity> findByEmail(String email);
 

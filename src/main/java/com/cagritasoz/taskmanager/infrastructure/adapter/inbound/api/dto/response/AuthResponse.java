@@ -13,9 +13,9 @@ import org.springframework.hateoas.EntityModel;
 @AllArgsConstructor
 public class AuthResponse {
 
-    private EntityModel<UserResponse> user;
+    private String token;
 
-    private JwtResponse jwtResponse;
+    private EntityModel<UserResponse> user;
 
     @JsonIgnore
     public UserResponse getContent() {

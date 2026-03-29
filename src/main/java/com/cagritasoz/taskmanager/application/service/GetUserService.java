@@ -22,7 +22,7 @@ public class GetUserService implements GetUserUseCase {
 
     private final UserReadHandler readHandler;
 
-    private final Action action = Action.VIEW;
+    private static final Action action = Action.VIEW;
 
     @Override
     public User getUser(Long id) {

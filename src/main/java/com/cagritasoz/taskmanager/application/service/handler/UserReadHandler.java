@@ -13,13 +13,18 @@ public class UserReadHandler { //Get services use it.
 
     private final LoggerPort loggerPort;
 
-    public record ReadUserContext(Long currentUserId, Role currentUserRole, Long targetUserId) {}
+    public record ReadUserContext(Long currentUserId,
+                                  Role currentUserRole,
+                                  Long targetUserId) {}
 
-    public record ReadUsersContext(Long currentUserId, Role currentUserRole) {}
+    public record ReadUsersContext(Long currentUserId,
+                                   Role currentUserRole) {}
 
     public ReadUserContext createContext(User currentUser, Long targetUserId) {
 
-        return new ReadUserContext(currentUser.getId(), currentUser.getRole(), targetUserId);
+        return new ReadUserContext(currentUser.getId(),
+                currentUser.getRole(),
+                targetUserId);
 
     }
 
@@ -38,7 +43,7 @@ public class UserReadHandler { //Get services use it.
 
     public void logListRetrievalAttempt(ReadUsersContext context, Action action) {
 
-        loggerPort.logInfo("{} attempt. User Id: {}, Role: {}",
+        loggerPort.logInfo("User {} attempt. User Id: {}, Role: {}",
                 action, context.currentUserId, context.currentUserRole);
 
     }
@@ -73,7 +78,7 @@ public class UserReadHandler { //Get services use it.
 
     public void logListRetrievalSuccess(ReadUsersContext context, Action action) {
 
-        loggerPort.logInfo("{} attempt successful. User Id: {}, Role: {}",
+        loggerPort.logInfo("User {} attempt successful. User Id: {}, Role: {}",
                 action, context.currentUserId, context.currentUserRole);
 
     }

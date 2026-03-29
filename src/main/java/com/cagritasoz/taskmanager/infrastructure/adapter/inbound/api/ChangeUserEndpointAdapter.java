@@ -29,13 +29,13 @@ public class ChangeUserEndpointAdapter {
 
     private final UserDtoToDomainMapper userDtoToDomainMapper;
 
-    private final UserDomainToDtoMapper userDomainToDtoMapper;
+    private final UserDomainToDtoMapper domainToDtoMapper;
 
     public EntityModel<UserResponse> createUser(CreateUserRequest createUserRequest) {
 
         User savedUser = createUserUseCase.createUser(userDtoToDomainMapper.toDomainModel(createUserRequest));
 
-        return userEntityModelAssembler.toModel(userDomainToDtoMapper.toDtoModel(savedUser));
+        return userEntityModelAssembler.toModel(domainToDtoMapper.toDtoModel(savedUser));
 
     }
 
@@ -43,7 +43,7 @@ public class ChangeUserEndpointAdapter {
 
         User updatedUser = updateUserUseCase.updateUser(id, userDtoToDomainMapper.toDomainModel(updateUserRequest));
 
-        return userEntityModelAssembler.toModel(userDomainToDtoMapper.toDtoModel(updatedUser));
+        return userEntityModelAssembler.toModel(domainToDtoMapper.toDtoModel(updatedUser));
 
     }
 

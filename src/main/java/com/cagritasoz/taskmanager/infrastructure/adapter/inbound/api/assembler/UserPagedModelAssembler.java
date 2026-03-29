@@ -1,9 +1,9 @@
 package com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.assembler;
 
 import com.cagritasoz.taskmanager.domain.model.Pagination;
-import com.cagritasoz.taskmanager.domain.model.SortField;
 import com.cagritasoz.taskmanager.domain.model.User;
 import com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.dto.response.UserResponse;
+import com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.mapper.InboundPaginationMapper;
 import com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.mapper.UserDomainToDtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
@@ -19,7 +19,10 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class UserPagedModelAssembler implements RepresentationModelAssembler<Pagination<User>, PagedModel<EntityModel<UserResponse>>> {
+public class UserPagedModelAssembler
+        implements RepresentationModelAssembler<Pagination<User>, PagedModel<EntityModel<UserResponse>>> {
+
+    private final InboundPaginationMapper paginationMapper;
 
     private final UserDomainToDtoMapper userDomainToDtoMapper;
 
@@ -32,7 +35,7 @@ public class UserPagedModelAssembler implements RepresentationModelAssembler<Pag
 
         List<UserResponse> users = userDomainToDtoMapper.toDtoModels(pagination.getContent());
 
-        Pageable pageable = fromPaginationToPageable(pagination);
+        Pageable pageable = paginationMapper.fromPaginationToPageable(pagination);
 
         Page<UserResponse> page = new PageImpl<>(users,
                 pageable,
@@ -40,35 +43,5 @@ public class UserPagedModelAssembler implements RepresentationModelAssembler<Pag
 
         return pagedResourcesAssembler.toModel(page, userEntityModelAssembler);
 
-    }
-
-    private <T> Pageable fromPaginationToPageable(Pagination<T> pagination) {
-
-        Sort sort;
-
-        if(!pagination.getSortFields().isEmpty()) {
-
-            List<Sort.Order> orders = new ArrayList<>();
-
-            for(SortField sortField : pagination.getSortFields()) {
-
-                Sort.Order order = sortField.isAscending()
-                        ? Sort.Order.asc(sortField.getProperty())
-                        : Sort.Order.desc(sortField.getProperty());
-
-                orders.add(order);
-
-            }
-
-            sort = Sort.by(orders);
-
-            return PageRequest.of(pagination.getPageNumber(),
-                    pagination.getSize(),
-                    sort);
-
-        }
-
-        return PageRequest.of(pagination.getPageNumber(),
-                pagination.getSize());
     }
 }

@@ -1,8 +1,11 @@
 package com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.assembler;
 
+import com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.TaskController;
 import com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.UserController;
 import com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.dto.response.UserResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.lang.NonNull;
@@ -22,8 +25,17 @@ public class UserEntityModelAssembler implements RepresentationModelAssembler<Us
 
         userResponseEntityModel.add(linkTo(methodOn(UserController.class).getUser(userResponse.getId())).withSelfRel());
 
+        userResponseEntityModel.add(linkTo(methodOn(TaskController.class).getTasks(userResponse.getId(),
+                Pageable.unpaged())).withRel("tasks"));
+
         return userResponseEntityModel;
 
     }
 
 }
+
+/*
+JSON (JavaScript Object Notation) is a generic, language-independent data format for representing structured data,
+while HAL (Hypertext Application Language) is a specific convention for using JSON to build hypermedia APIs.
+All HAL is JSON, but not all JSON is HAL.
+ */

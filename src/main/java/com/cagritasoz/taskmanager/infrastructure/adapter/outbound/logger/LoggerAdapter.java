@@ -8,73 +8,24 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoggerAdapter implements LoggerPort {
 
+
     @Override
     public void logInfo(String message) {
-
         log.info(message);
-
     }
 
     @Override
-    public void logInfo(String message, Object object) {
-
-        log.info(message, object);
-
-    }
-
-    @Override
-    public void logInfo(String message, Object o1, Object o2) {
-
-        log.info(message, o1, o2);
-
-    }
-
-    @Override
-    public void logInfo(String message, Object o1, Object o2, Object o3) {
-
-        log.info(message, o1, o2, o3);
-
-    }
-
-    @Override
-    public void logInfo(String message, Object o1, Object o2, Object o3, Object o4) {
-
-        log.info(message, o1, o2, o3, o4);
-
+    public void logInfo(String message, Object... args) {
+        log.info(message, args);
     }
 
     @Override
     public void logWarn(String message) {
-
         log.warn(message);
-
     }
 
     @Override
-    public void logWarn(String message, Object object) {
-
-        log.warn(message, object);
-
-    }
-
-    @Override
-    public void logWarn(String message, Object o1, Object o2) {
-
-        log.warn(message, o1, o2);
-
-    }
-
-    @Override
-    public void logWarn(String message, Object o1, Object o2, Object o3) {
-
-        log.warn(message, o1, o2, o3);
-
-    }
-
-    @Override
-    public void logWarn(String message, Object o1, Object o2, Object o3, Object o4) {
-
-        log.warn(message, o1, o2, o3, o4);
-
+    public void logWarn(String message, Object... args) {
+        log.warn(message, args);
     }
 }

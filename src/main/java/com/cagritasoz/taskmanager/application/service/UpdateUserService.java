@@ -25,18 +25,18 @@ public class UpdateUserService implements UpdateUserUseCase {
 
     private final UserModificationHandler modificationHandler;
 
+    private static final Action action = Action.UPDATE;
+
     @Override
-    public User updateUser(Long id, User targetUser) {
+    public User updateUser(Long targetUserId, User targetUser) {
 
         User currentUser = currentUserPort.getCurrentUser(); //Get logged-in user.
 
-        UserModificationHandler.ModifyUserContext context = modificationHandler.createContext(currentUser, id);
-
-        Action action = Action.UPDATE;
+        UserModificationHandler.ModifyUserContext context = modificationHandler.createContext(currentUser, targetUserId);
 
         modificationHandler.logAttempt(context, action);
 
-        boolean canAccess = currentUser.getRole() == Role.ADMIN || currentUser.getId().equals(id);
+        boolean canAccess = currentUser.getRole() == Role.ADMIN || currentUser.getId().equals(targetUserId);
 
         if(!canAccess) {
 
@@ -48,7 +48,7 @@ public class UpdateUserService implements UpdateUserUseCase {
 
         modificationHandler.logAccessGranted(context, action);
 
-        User actualUserToBeUpdated = readUserPort.findById(id)
+        User actualUserToBeUpdated = readUserPort.findById(targetUserId)
                 .orElseThrow(() -> {
 
                     modificationHandler.logUserNotFound(context, action);
@@ -61,7 +61,7 @@ public class UpdateUserService implements UpdateUserUseCase {
 
         encodePassword(targetUser, actualUserToBeUpdated, context);
 
-        User updatedUser = writeUserPort.updateUser(id, targetUser);
+        User updatedUser = writeUserPort.updateUser(targetUserId, targetUser);
 
         modificationHandler.logSuccess(context, action);
 

@@ -7,7 +7,6 @@ import com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.assembler.U
 import com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.dto.request.LoginRequest;
 import com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.dto.request.RegisterRequest;
 import com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.dto.response.AuthResponse;
-import com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.dto.response.JwtResponse;
 import com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.mapper.UserDomainToDtoMapper;
 import com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.mapper.UserDtoToDomainMapper;
 import lombok.RequiredArgsConstructor;
@@ -21,18 +20,16 @@ public class AuthControllerAdapter {
 
     private final UserEntityModelAssembler userEntityModelAssembler;
 
-    private final UserDtoToDomainMapper userDtoToDomainMapper;
+    private final UserDtoToDomainMapper dtoToDomainMapper;
 
-    private final UserDomainToDtoMapper userDomainToDtoMapper;
+    private final UserDomainToDtoMapper domainToDtoMapper;
 
     public AuthResponse registerUser(RegisterRequest registerRequest) {
 
-        UserWithToken userWithToken = authUseCase.registerUser(userDtoToDomainMapper.toDomainModel(registerRequest));
+        UserWithToken userWithToken = authUseCase.registerUser(dtoToDomainMapper.toDomainModel(registerRequest));
 
-        return new AuthResponse(userEntityModelAssembler
-                .toModel(userDomainToDtoMapper
-                        .toDtoModel(userWithToken.getUser())),
-                new JwtResponse(userWithToken.getJwt()));
+        return new AuthResponse(userWithToken.getToken(),
+                userEntityModelAssembler.toModel(domainToDtoMapper.toDtoModel(userWithToken.getUser())));
 
     }
 
@@ -40,10 +37,8 @@ public class AuthControllerAdapter {
 
         UserWithToken userWithToken = authUseCase.loginUser(loginRequest.getEmail(), loginRequest.getPassword());
 
-        return new AuthResponse(userEntityModelAssembler
-                .toModel(userDomainToDtoMapper
-                        .toDtoModel(userWithToken.getUser())),
-                new JwtResponse(userWithToken.getJwt()));
+        return new AuthResponse(userWithToken.getToken(),
+                userEntityModelAssembler.toModel(domainToDtoMapper.toDtoModel(userWithToken.getUser())));
 
     }
 

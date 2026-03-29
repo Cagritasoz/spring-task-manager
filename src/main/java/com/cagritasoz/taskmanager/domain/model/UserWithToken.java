@@ -11,6 +11,6 @@ public class UserWithToken {
 
     private User user;
 
-    private String jwt;
+    private String token;
 
 }

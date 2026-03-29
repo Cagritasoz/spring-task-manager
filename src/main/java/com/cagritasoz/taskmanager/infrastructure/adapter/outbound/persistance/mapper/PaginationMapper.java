@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class OutboundPaginationMapper {
+public class PaginationMapper {
 
     public <T> Pageable fromPaginationToPageable(Pagination<T> pagination) {
 

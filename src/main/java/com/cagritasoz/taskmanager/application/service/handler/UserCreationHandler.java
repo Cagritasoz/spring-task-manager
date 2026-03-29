@@ -13,32 +13,45 @@ public class UserCreationHandler { //Only CreateUserService uses it.
 
     private final LoggerPort loggerPort;
 
-    public record CreateUserContext(Long currentUserId, Role currentUserRole, String newUserEmail) {}
+    public record CreateUserContext(Long currentUserId,
+                                    Role currentUserRole,
+                                    String newUserEmail) {}
 
     public CreateUserContext createContext(User currentUser, String newUserEmail) {
 
-        return new CreateUserContext(currentUser.getId(), currentUser.getRole(), newUserEmail);
+        return new CreateUserContext(currentUser.getId(),
+                currentUser.getRole(),
+                newUserEmail);
 
     }
 
     public void logAttempt(CreateUserContext context, Action action) {
 
         loggerPort.logInfo("User {} attempt. User Id: {}, Role: {}, New User Email: {}",
-                action, context.currentUserId, context.currentUserRole, context.newUserEmail);
+                action,
+                context.currentUserId,
+                context.currentUserRole,
+                context.newUserEmail);
 
     }
 
     public void logEmailAlreadyExists(CreateUserContext context, Action action) {
 
         loggerPort.logWarn("{} attempt failed, email already exists. User Id: {}, Role: {}, New User Email: {}",
-                action, context.currentUserId, context.currentUserRole, context.newUserEmail);
+                action,
+                context.currentUserId,
+                context.currentUserRole,
+                context.newUserEmail);
 
     }
 
     public void logSuccess(CreateUserContext context, Action action) {
 
-        loggerPort.logInfo("Successful {} attempt. User Id: {}, Role: {}, New User Email: {}",
-                action, context.currentUserId, context.currentUserRole, context.newUserEmail);
+        loggerPort.logInfo("Successful user {} attempt. User Id: {}, Role: {}, New User Email: {}",
+                action,
+                context.currentUserId,
+                context.currentUserRole,
+                context.newUserEmail);
 
     }
 

@@ -3,8 +3,8 @@ package com.cagritasoz.taskmanager.infrastructure.adapter.outbound.persistance;
 import com.cagritasoz.taskmanager.application.ports.outbound.ReadUserPort;
 import com.cagritasoz.taskmanager.domain.model.Pagination;
 import com.cagritasoz.taskmanager.domain.model.User;
+import com.cagritasoz.taskmanager.infrastructure.adapter.inbound.api.mapper.InboundPaginationMapper;
 import com.cagritasoz.taskmanager.infrastructure.adapter.outbound.persistance.entity.UserEntity;
-import com.cagritasoz.taskmanager.infrastructure.adapter.outbound.persistance.mapper.OutboundPaginationMapper;
 import com.cagritasoz.taskmanager.infrastructure.adapter.outbound.persistance.mapper.UserJpaMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,7 +21,7 @@ public class ReadUserAdapter implements ReadUserPort {
 
     private final UserJpaMapper userJpaMapper;
 
-    private final OutboundPaginationMapper outboundPaginationMapper;
+    private final InboundPaginationMapper paginationMapper;
 
     @Override
     public Optional<User> findById(Long id) {
@@ -34,7 +34,7 @@ public class ReadUserAdapter implements ReadUserPort {
     @Override
     public Pagination<User> findAll(Pagination<User> pagination) {
 
-        Pageable pageable = outboundPaginationMapper.fromPaginationToPageable(pagination);
+        Pageable pageable = paginationMapper.fromPaginationToPageable(pagination);
 
         Page<UserEntity> page = userJpaRepository.findAll(pageable);
 

@@ -24,25 +24,25 @@ public class FindUserEndpointAdapter {
 
     private final GetUsersUseCase getUsersUseCase;
 
-    private final UserDomainToDtoMapper userDomainToDtoMapper;
-
-    private final InboundPaginationMapper inboundPaginationMapper;
-
     private final UserEntityModelAssembler userEntityModelAssembler;
 
     private final UserPagedModelAssembler userPagedModelAssembler;
 
+    private final InboundPaginationMapper paginationMapper;
+
+    private final UserDomainToDtoMapper domainToDtoMapper;
+
     public EntityModel<UserResponse> getUser(Long id) {
 
-        User user = getUserUseCase.getUser(id);
+        User foundUser = getUserUseCase.getUser(id);
 
-        return userEntityModelAssembler.toModel(userDomainToDtoMapper.toDtoModel(user));
+        return userEntityModelAssembler.toModel(domainToDtoMapper.toDtoModel(foundUser));
 
     }
 
     public PagedModel<EntityModel<UserResponse>> getUsers(Pageable pageable) {
 
-        Pagination<User> pagination = getUsersUseCase.getUsers(inboundPaginationMapper.fromPageableToPagination(pageable));
+        Pagination<User> pagination = getUsersUseCase.getUsers(paginationMapper.fromPageableToPagination(pageable));
 
         return userPagedModelAssembler.toModel(pagination);
 

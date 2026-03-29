@@ -23,7 +23,7 @@ public class CreateUserService implements CreateUserUseCase {
 
     private final UserCreationHandler creationHandler;
 
-    private final Action action = Action.CREATE;
+    private static final Action action = Action.CREATE;
 
     @Override
     public User createUser(User user) {

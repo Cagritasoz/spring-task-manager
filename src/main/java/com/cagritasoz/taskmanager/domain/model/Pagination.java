@@ -22,7 +22,4 @@ public class Pagination<T> {
     long totalElements; //Page
 
     long totalPages;//Page
-
-
-
 }

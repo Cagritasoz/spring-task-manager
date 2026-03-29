@@ -13,39 +13,55 @@ public class UserModificationHandler { //Update and Delete services use it.
 
     private final LoggerPort loggerPort;
 
-    public record ModifyUserContext(Long currentUserId, Role currentUserRole, Long targetUserId) {}
+    public record ModifyUserContext(Long currentUserId,
+                                    Role currentUserRole,
+                                    Long targetUserId) {}
 
     public ModifyUserContext createContext(User currentUser, Long targetUserId ) {
 
-        return new ModifyUserContext(currentUser.getId(), currentUser.getRole(), targetUserId);
+        return new ModifyUserContext(currentUser.getId(),
+                currentUser.getRole(),
+                targetUserId);
 
     }
 
     public void logAttempt(ModifyUserContext context, Action action) {
 
         loggerPort.logInfo("User {} attempt. User Id: {}, Role: {}, Target User Id: {}",
-                action, context.currentUserId, context.currentUserRole, context.targetUserId);
+                action,
+                context.currentUserId,
+                context.currentUserRole,
+                context.targetUserId);
 
     }
 
     public void logUserNotFound(ModifyUserContext context, Action action) {
 
         loggerPort.logWarn("{} attempt failed, user does not exist. User Id: {}, Role: {}, Target User Id: {}",
-                action, context.currentUserId, context.currentUserRole, context.targetUserId);
+                action,
+                context.currentUserId,
+                context.currentUserRole,
+                context.targetUserId);
 
     }
 
     public void logForbidden(ModifyUserContext context, Action action) {
 
         loggerPort.logWarn("Forbidden {} attempt. User Id: {}, Role: {}, Target User Id: {}",
-                action, context.currentUserId, context.currentUserRole, context.targetUserId);
+                action,
+                context.currentUserId,
+                context.currentUserRole,
+                context.targetUserId);
 
     }
 
     public void logAccessGranted(ModifyUserContext context, Action action) {
 
         loggerPort.logInfo("Access granted for {}. User Id: {}, Role: {}, Target User Id: {}",
-                action, context.currentUserId, context.currentUserRole, context.targetUserId);
+                action,
+                context.currentUserId,
+                context.currentUserRole,
+                context.targetUserId);
 
     }
 
@@ -71,7 +87,10 @@ public class UserModificationHandler { //Update and Delete services use it.
     public void logSuccess(ModifyUserContext context, Action action) {
 
         loggerPort.logInfo("Successful {} attempt. User Id: {}, Role: {}, Target User Id: {}",
-                action, context.currentUserId, context.currentUserRole, context.targetUserId);
+                action,
+                context.currentUserId,
+                context.currentUserRole,
+                context.targetUserId);
 
     }
 

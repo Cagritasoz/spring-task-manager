@@ -20,7 +20,7 @@ public class GetUsersService implements GetUsersUseCase {
 
     private final UserReadHandler readHandler;
 
-    private final Action action = Action.VIEW_LIST;
+    private static final Action action = Action.VIEW_LIST;
 
     @Override
     public Pagination<User> getUsers(Pagination<User> pagination) {

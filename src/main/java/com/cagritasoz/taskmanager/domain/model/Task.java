@@ -20,6 +20,6 @@ public class Task {
 
     private LocalDateTime dueDate;
 
-    private User user;
+    private Long userId;
 
 }
