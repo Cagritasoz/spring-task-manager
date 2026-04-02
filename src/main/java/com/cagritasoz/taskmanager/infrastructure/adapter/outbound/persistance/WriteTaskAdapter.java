@@ -9,6 +9,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 public class WriteTaskAdapter implements WriteTaskPort {
@@ -30,6 +32,31 @@ public class WriteTaskAdapter implements WriteTaskPort {
         TaskEntity taskEntity = taskJpaMapper.toEntityModel(task, userEntity);
 
         return taskJpaMapper.toDomainModel(taskJpaRepository.save(taskEntity), userId);
+
+    }
+
+    @Override
+    @Transactional
+    public Task updateTask(Long userId, Long taskId, Task task) {
+
+        Optional<TaskEntity> taskEntityOptional = taskJpaRepository.findById(taskId);
+
+        taskEntityOptional.ifPresent(taskEntity -> {
+
+            taskEntity.setTitle(task.getTitle());
+            taskEntity.setDescription(task.getDescription());
+            taskEntity.setDueDate(task.getDueDate());
+
+        });
+
+        return taskEntityOptional.map(taskEntity -> taskJpaMapper.toDomainModel(taskEntity, userId))
+                .orElse(null);
+    }
+
+    @Override
+    public void deleteTask(Long taskId) {
+
+        taskJpaRepository.deleteById(taskId);
 
     }
 

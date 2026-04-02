@@ -3,7 +3,7 @@ package com.cagritasoz.taskmanager.application.service;
 import com.cagritasoz.taskmanager.application.ports.inbound.GetUsersUseCase;
 import com.cagritasoz.taskmanager.application.ports.outbound.CurrentUserPort;
 import com.cagritasoz.taskmanager.application.ports.outbound.ReadUserPort;
-import com.cagritasoz.taskmanager.application.service.handler.UserReadHandler;
+import com.cagritasoz.taskmanager.application.service.handler.UserReadLogBuilder;
 import com.cagritasoz.taskmanager.domain.model.Action;
 import com.cagritasoz.taskmanager.domain.model.Pagination;
 import com.cagritasoz.taskmanager.domain.model.User;
@@ -18,7 +18,7 @@ public class GetUsersService implements GetUsersUseCase {
 
     private final ReadUserPort readUserPort;
 
-    private final UserReadHandler readHandler;
+    private final UserReadLogBuilder logBuilder;
 
     private static final Action action = Action.VIEW_LIST;
 
@@ -27,13 +27,13 @@ public class GetUsersService implements GetUsersUseCase {
 
         User currentUser = currentUserPort.getCurrentUser();
 
-        UserReadHandler.ReadUsersContext context = readHandler.createContext(currentUser);
+        UserReadLogBuilder.ReadUsersContext context = logBuilder.createContext(currentUser);
 
-        readHandler.logListRetrievalAttempt(context, action);
+        logBuilder.logListRetrievalAttempt(context, action);
 
         Pagination<User> usersPaginated = readUserPort.findAll(pagination);
 
-        readHandler.logListRetrievalSuccess(context, action);
+        logBuilder.logListRetrievalSuccess(context, action);
 
         return usersPaginated;
 

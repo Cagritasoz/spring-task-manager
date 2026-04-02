@@ -11,4 +11,6 @@ public interface ReadTaskPort {
 
     Pagination<Task> findAll(Long id, Pagination<Task> pagination);
 
+    boolean existsById(Long id);
+
 }

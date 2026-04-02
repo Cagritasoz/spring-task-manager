@@ -4,7 +4,7 @@ import com.cagritasoz.taskmanager.application.ports.inbound.CreateTaskUseCase;
 import com.cagritasoz.taskmanager.application.ports.outbound.CurrentUserPort;
 import com.cagritasoz.taskmanager.application.ports.outbound.ReadUserPort;
 import com.cagritasoz.taskmanager.application.ports.outbound.WriteTaskPort;
-import com.cagritasoz.taskmanager.application.service.handler.TaskCreationHandler;
+import com.cagritasoz.taskmanager.application.service.handler.TaskCreationLogBuilder;
 import com.cagritasoz.taskmanager.domain.exception.ForbiddenException;
 import com.cagritasoz.taskmanager.domain.exception.UserNotFoundException;
 import com.cagritasoz.taskmanager.domain.model.Action;
@@ -24,7 +24,7 @@ public class CreateTaskService implements CreateTaskUseCase {
 
     private final WriteTaskPort writeTaskPort;
 
-    private final TaskCreationHandler creationHandler;
+    private final TaskCreationLogBuilder logBuilder;
 
     private static final Action action = Action.CREATE;
 
@@ -34,15 +34,15 @@ public class CreateTaskService implements CreateTaskUseCase {
         User currentUser = currentUserPort.getCurrentUser();
         String newTaskTitle = task.getTitle();
 
-        TaskCreationHandler.CreateTaskContext context = creationHandler.createContext(currentUser, targetUserId, newTaskTitle);
+        TaskCreationLogBuilder.CreateTaskContext context = logBuilder.createContext(currentUser, targetUserId, newTaskTitle);
 
-        creationHandler.logAttempt(context, action);
+        logBuilder.logAttempt(context, action);
 
         boolean canAccess = currentUser.getRole() == Role.ADMIN || currentUser.getId().equals(targetUserId);
 
         if(!canAccess) {
 
-            creationHandler.logForbidden(context, action);
+            logBuilder.logForbidden(context, action);
 
             throw new ForbiddenException();
 
@@ -50,17 +50,17 @@ public class CreateTaskService implements CreateTaskUseCase {
 
         else if(!readUserPort.existsById(targetUserId)) {
 
-            creationHandler.logUserNotFound(context, action);
+            logBuilder.logUserNotFound(context, action);
 
             throw new UserNotFoundException();
 
         }
 
-        creationHandler.logAccessGranted(context, action);
+        logBuilder.logAccessGranted(context, action);
 
         Task savedTask = writeTaskPort.saveTask(targetUserId, task);
 
-        creationHandler.logSuccess(context, action);
+        logBuilder.logSuccess(context, action);
 
         return savedTask;
 

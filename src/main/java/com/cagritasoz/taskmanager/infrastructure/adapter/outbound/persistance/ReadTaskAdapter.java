@@ -46,4 +46,10 @@ public class ReadTaskAdapter implements ReadTaskPort {
         return pagination;
 
     }
+
+    @Override
+    public boolean existsById(Long id) {
+        return taskJpaRepository.existsById(id);
+    }
+
 }

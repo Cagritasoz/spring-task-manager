@@ -4,7 +4,7 @@ import com.cagritasoz.taskmanager.application.ports.inbound.DeleteUserUseCase;
 import com.cagritasoz.taskmanager.application.ports.outbound.CurrentUserPort;
 import com.cagritasoz.taskmanager.application.ports.outbound.ReadUserPort;
 import com.cagritasoz.taskmanager.application.ports.outbound.WriteUserPort;
-import com.cagritasoz.taskmanager.application.service.handler.UserModificationHandler;
+import com.cagritasoz.taskmanager.application.service.handler.UserModificationLogBuilder;
 import com.cagritasoz.taskmanager.domain.exception.ForbiddenException;
 import com.cagritasoz.taskmanager.domain.exception.UserNotFoundException;
 import com.cagritasoz.taskmanager.domain.model.Action;
@@ -23,7 +23,7 @@ public class DeleteUserService implements DeleteUserUseCase {
 
     private final WriteUserPort writeUserPort;
 
-    private final UserModificationHandler modificationHandler;
+    private final UserModificationLogBuilder logBuilder;
 
     private static final Action action = Action.DELETE;
 
@@ -32,32 +32,32 @@ public class DeleteUserService implements DeleteUserUseCase {
 
         User currentUser = currentUserPort.getCurrentUser();
 
-        UserModificationHandler.ModifyUserContext context =  modificationHandler
+        UserModificationLogBuilder.ModifyUserContext context =  logBuilder
                 .createContext(currentUser, targetUserId);
 
-        modificationHandler.logAttempt(context, action);
+        logBuilder.logAttempt(context, action);
 
         boolean canAccess = currentUser.getRole() == Role.ADMIN || currentUser.getId().equals(targetUserId);
 
         if(!canAccess) {
 
-            modificationHandler.logForbidden(context, action);
+            logBuilder.logForbidden(context, action);
 
             throw new ForbiddenException();
 
         } else if (!readUserPort.existsById(targetUserId)) {
 
-            modificationHandler.logUserNotFound(context, action);
+            logBuilder.logUserNotFound(context, action);
 
             throw new UserNotFoundException();
 
         }
 
-        modificationHandler.logAccessGranted(context, action);
+        logBuilder.logAccessGranted(context, action);
 
         writeUserPort.deleteUser(targetUserId);
 
-        modificationHandler.logSuccess(context, action);
+        logBuilder.logSuccess(context, action);
 
     }
 }

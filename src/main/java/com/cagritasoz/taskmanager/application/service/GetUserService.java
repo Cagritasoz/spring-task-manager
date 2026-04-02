@@ -3,7 +3,7 @@ package com.cagritasoz.taskmanager.application.service;
 import com.cagritasoz.taskmanager.application.ports.inbound.GetUserUseCase;
 import com.cagritasoz.taskmanager.application.ports.outbound.CurrentUserPort;
 import com.cagritasoz.taskmanager.application.ports.outbound.ReadUserPort;
-import com.cagritasoz.taskmanager.application.service.handler.UserReadHandler;
+import com.cagritasoz.taskmanager.application.service.handler.UserReadLogBuilder;
 import com.cagritasoz.taskmanager.domain.exception.ForbiddenException;
 import com.cagritasoz.taskmanager.domain.exception.UserNotFoundException;
 import com.cagritasoz.taskmanager.domain.model.Action;
@@ -20,7 +20,7 @@ public class GetUserService implements GetUserUseCase {
 
     private final ReadUserPort readUserPort;
 
-    private final UserReadHandler readHandler;
+    private final UserReadLogBuilder logBuilder;
 
     private static final Action action = Action.VIEW;
 
@@ -29,31 +29,31 @@ public class GetUserService implements GetUserUseCase {
 
         User currentUser = currentUserPort.getCurrentUser();
 
-        UserReadHandler.ReadUserContext context = readHandler.createContext(currentUser, id);
+        UserReadLogBuilder.ReadUserContext context = logBuilder.createContext(currentUser, id);
 
-        readHandler.logAttempt(context, action);
+        logBuilder.logAttempt(context, action);
 
         boolean canAccess = currentUser.getRole() == Role.ADMIN || currentUser.getId().equals(id);
 
         if(!canAccess) {
 
-            readHandler.logForbidden(context, action);
+            logBuilder.logForbidden(context, action);
 
             throw new ForbiddenException();
 
         }
 
-        readHandler.logAccessGranted(context, action);
+        logBuilder.logAccessGranted(context, action);
 
         User retrievedUser = readUserPort.findById(id)
                         .orElseThrow(() -> {
 
-                            readHandler.logUserNotFound(context, action);
+                            logBuilder.logUserNotFound(context, action);
 
                             return new UserNotFoundException();
                         });
 
-        readHandler.logSuccess(context, action);
+        logBuilder.logSuccess(context, action);
 
         return retrievedUser;
     }

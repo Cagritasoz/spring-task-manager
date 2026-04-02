@@ -58,7 +58,7 @@ public class TaskEntity {
     Because my system uses a unidirectional (Task -> User), we have to handle delete cascading in the DB.
     @OnDelete annotation adds a foreign key constraint to the database schema.
      */
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OnDelete(action = OnDeleteAction.CASCADE) //On delete works!
     private UserEntity user;
 
 }

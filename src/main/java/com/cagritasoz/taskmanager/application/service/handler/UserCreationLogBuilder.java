@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UserCreationHandler { //Only CreateUserService uses it.
+public class UserCreationLogBuilder { //Only CreateUserService uses it.
 
     private final LoggerPort loggerPort;
 

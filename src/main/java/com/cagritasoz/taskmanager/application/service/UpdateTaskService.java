@@ -1,10 +1,11 @@
 package com.cagritasoz.taskmanager.application.service;
 
-import com.cagritasoz.taskmanager.application.ports.inbound.GetTaskUseCase;
+import com.cagritasoz.taskmanager.application.ports.inbound.UpdateTaskUseCase;
 import com.cagritasoz.taskmanager.application.ports.outbound.CurrentUserPort;
 import com.cagritasoz.taskmanager.application.ports.outbound.ReadTaskPort;
 import com.cagritasoz.taskmanager.application.ports.outbound.ReadUserPort;
-import com.cagritasoz.taskmanager.application.service.handler.TaskReadLogBuilder;
+import com.cagritasoz.taskmanager.application.ports.outbound.WriteTaskPort;
+import com.cagritasoz.taskmanager.application.service.handler.TaskModificationLogBuilder;
 import com.cagritasoz.taskmanager.domain.exception.ForbiddenException;
 import com.cagritasoz.taskmanager.domain.exception.TaskNotFoundException;
 import com.cagritasoz.taskmanager.domain.exception.UserNotFoundException;
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class GetTaskService implements GetTaskUseCase {
+public class UpdateTaskService implements UpdateTaskUseCase {
 
     private final CurrentUserPort currentUserPort;
 
@@ -25,17 +26,18 @@ public class GetTaskService implements GetTaskUseCase {
 
     private final ReadTaskPort readTaskPort;
 
-    private final TaskReadLogBuilder logBuilder;
+    private final WriteTaskPort writeTaskPort;
 
-    private static final Action action = Action.VIEW;
+    private final TaskModificationLogBuilder logBuilder;
 
+    private final Action action = Action.UPDATE;
 
     @Override
-    public Task getTask(Long targetUserId, Long targetTaskId) {
+    public Task updateTask(Long targetUserId, Long targetTaskId, Task task) {
 
         User currentUser = currentUserPort.getCurrentUser();
 
-        TaskReadLogBuilder.ReadTaskContext context = logBuilder.createContext(currentUser,
+        TaskModificationLogBuilder.ModifyTaskContext context = logBuilder.createContext(currentUser,
                 targetUserId,
                 targetTaskId);
 
@@ -59,20 +61,21 @@ public class GetTaskService implements GetTaskUseCase {
 
         }
 
+        else if(!readTaskPort.existsById(targetTaskId)) {
+
+            logBuilder.logTaskNotFound(context, action);
+
+            throw new TaskNotFoundException();
+
+        }
+
         logBuilder.logAccessGranted(context, action);
 
-        Task foundTask = readTaskPort.findById(targetTaskId)
-                .orElseThrow(() -> {
-
-                    logBuilder.logTaskNotFound(context, action);
-
-                    return new TaskNotFoundException();
-
-                });
+        Task updatedTask = writeTaskPort.updateTask(targetUserId, targetTaskId, task);
 
         logBuilder.logSuccess(context, action);
 
-        return foundTask;
-
+        return updatedTask;
     }
+
 }

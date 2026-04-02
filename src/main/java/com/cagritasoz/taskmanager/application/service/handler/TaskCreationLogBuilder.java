@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class TaskCreationHandler {
+public class TaskCreationLogBuilder {
 
     private final LoggerPort loggerPort;
 

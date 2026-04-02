@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UserModificationHandler { //Update and Delete services use it.
+public class UserModificationLogBuilder { //Update and Delete user services use it.
 
     private final LoggerPort loggerPort;
 
@@ -17,7 +17,7 @@ public class UserModificationHandler { //Update and Delete services use it.
                                     Role currentUserRole,
                                     Long targetUserId) {}
 
-    public ModifyUserContext createContext(User currentUser, Long targetUserId ) {
+    public ModifyUserContext createContext(User currentUser, Long targetUserId) {
 
         return new ModifyUserContext(currentUser.getId(),
                 currentUser.getRole(),

@@ -23,10 +23,27 @@ public class UserEntityModelAssembler implements RepresentationModelAssembler<Us
 
         EntityModel<UserResponse> userResponseEntityModel = EntityModel.of(userResponse);
 
-        userResponseEntityModel.add(linkTo(methodOn(UserController.class).getUser(userResponse.getId())).withSelfRel());
+        Long userId = userResponse.getId();
 
-        userResponseEntityModel.add(linkTo(methodOn(TaskController.class).getTasks(userResponse.getId(),
-                Pageable.unpaged())).withRel("tasks"));
+        userResponseEntityModel.add(linkTo(methodOn(UserController.class)
+                .getUser(userId))
+                .withSelfRel());
+
+        userResponseEntityModel.add(linkTo(methodOn(UserController.class)
+                .updateUser(userId, null))
+                .withRel("update"));
+
+        userResponseEntityModel.add(linkTo(methodOn(UserController.class)
+                .deleteUser(userId))
+                .withRel("delete"));
+
+        userResponseEntityModel.add(linkTo(methodOn(TaskController.class)
+                .getTasks(userId, Pageable.unpaged()))
+                .withRel("tasks"));
+
+        userResponseEntityModel.add(linkTo(methodOn(TaskController.class)
+                .createTask(userId,null))
+                .withRel("create-task"));
 
         return userResponseEntityModel;
 
@@ -38,4 +55,8 @@ public class UserEntityModelAssembler implements RepresentationModelAssembler<Us
 JSON (JavaScript Object Notation) is a generic, language-independent data format for representing structured data,
 while HAL (Hypertext Application Language) is a specific convention for using JSON to build hypermedia APIs.
 All HAL is JSON, but not all JSON is HAL.
+
+In REST, a link is primarily a "pointer" to another resource.
+The web follows the same rule: in HTML, an <a href="..."> tag doesn't specify a method because it is always a GET.
+In HATEOAS, if a link is provided without a method, the client assumes it should perform a GET to "discover" that resource.
  */

@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 // This is a meta-annotation that combines:
 // 1. @Configuration → marks the class as a Spring config source
 // 2. @EnableAutoConfiguration → auto configures Spring based on dependencies
-// 3. @ComponentScan → scans this package and sub-packages for components
+// 3. @ComponentScan → scans this package and sub-packages for components, registers them in the "application context".
 // It is the entry point of the entire Spring Boot application.
 
 public class TaskManagerApplication {

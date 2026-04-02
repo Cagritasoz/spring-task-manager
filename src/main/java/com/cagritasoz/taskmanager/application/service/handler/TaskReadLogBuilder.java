@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class TaskReadHandler {
+public class TaskReadLogBuilder {
 
     private final LoggerPort loggerPort;
 
@@ -134,7 +134,7 @@ public class TaskReadHandler {
 
     public void logTaskNotFound(ReadTaskContext context, Action action) {
 
-        loggerPort.logInfo("{} attempt failed, task does not exist. User Id: {}, Role: {}," +
+        loggerPort.logWarn("{} attempt failed, task does not exist. User Id: {}, Role: {}," +
                         " Target User Id: {}, Target Task Id: {}",
                 action,
                 context.currentUserId,

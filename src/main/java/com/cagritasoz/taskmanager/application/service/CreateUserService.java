@@ -2,7 +2,7 @@ package com.cagritasoz.taskmanager.application.service;
 
 import com.cagritasoz.taskmanager.application.ports.inbound.CreateUserUseCase;
 import com.cagritasoz.taskmanager.application.ports.outbound.*;
-import com.cagritasoz.taskmanager.application.service.handler.UserCreationHandler;
+import com.cagritasoz.taskmanager.application.service.handler.UserCreationLogBuilder;
 import com.cagritasoz.taskmanager.domain.exception.EmailAlreadyExistsException;
 import com.cagritasoz.taskmanager.domain.model.Action;
 import com.cagritasoz.taskmanager.domain.model.User;
@@ -21,7 +21,7 @@ public class CreateUserService implements CreateUserUseCase {
 
     private final WriteUserPort writeUserPort;
 
-    private final UserCreationHandler creationHandler;
+    private final UserCreationLogBuilder logBuilder;
 
     private static final Action action = Action.CREATE;
 
@@ -31,13 +31,13 @@ public class CreateUserService implements CreateUserUseCase {
         User currentUser = currentUserPort.getCurrentUser();
         String newUserEmail = user.getEmail();
 
-        UserCreationHandler.CreateUserContext context = creationHandler.createContext(currentUser, newUserEmail);
+        UserCreationLogBuilder.CreateUserContext context = logBuilder.createContext(currentUser, newUserEmail);
 
-        creationHandler.logAttempt(context, action);
+        logBuilder.logAttempt(context, action);
 
         if(readUserPort.existsByEmail(newUserEmail)) {
 
-            creationHandler.logEmailAlreadyExists(context, action);
+            logBuilder.logEmailAlreadyExists(context, action);
 
             throw new EmailAlreadyExistsException();
 
@@ -47,7 +47,7 @@ public class CreateUserService implements CreateUserUseCase {
 
         User savedUser = writeUserPort.saveUser(user);
 
-        creationHandler.logSuccess(context, action);
+        logBuilder.logSuccess(context, action);
 
         return savedUser;
 

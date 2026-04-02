@@ -12,7 +12,7 @@ public class TaskDomainToDtoMapper {
     public TaskResponse toDtoModel(Task task) {
 
         return new TaskResponse(task.getId(),
-                task.getDescription(),
+                task.getTitle(),
                 task.getDescription(),
                 task.getDueDate(),
                 task.getUserId());

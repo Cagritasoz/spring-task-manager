@@ -1,23 +1,23 @@
 package com.cagritasoz.taskmanager.application.service;
 
-import com.cagritasoz.taskmanager.application.ports.inbound.GetTaskUseCase;
+import com.cagritasoz.taskmanager.application.ports.inbound.DeleteTaskUseCase;
 import com.cagritasoz.taskmanager.application.ports.outbound.CurrentUserPort;
 import com.cagritasoz.taskmanager.application.ports.outbound.ReadTaskPort;
 import com.cagritasoz.taskmanager.application.ports.outbound.ReadUserPort;
-import com.cagritasoz.taskmanager.application.service.handler.TaskReadLogBuilder;
+import com.cagritasoz.taskmanager.application.ports.outbound.WriteTaskPort;
+import com.cagritasoz.taskmanager.application.service.handler.TaskModificationLogBuilder;
 import com.cagritasoz.taskmanager.domain.exception.ForbiddenException;
 import com.cagritasoz.taskmanager.domain.exception.TaskNotFoundException;
 import com.cagritasoz.taskmanager.domain.exception.UserNotFoundException;
 import com.cagritasoz.taskmanager.domain.model.Action;
 import com.cagritasoz.taskmanager.domain.model.Role;
-import com.cagritasoz.taskmanager.domain.model.Task;
 import com.cagritasoz.taskmanager.domain.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class GetTaskService implements GetTaskUseCase {
+public class DeleteTaskService implements DeleteTaskUseCase {
 
     private final CurrentUserPort currentUserPort;
 
@@ -25,17 +25,18 @@ public class GetTaskService implements GetTaskUseCase {
 
     private final ReadTaskPort readTaskPort;
 
-    private final TaskReadLogBuilder logBuilder;
+    private final WriteTaskPort writeTaskPort;
 
-    private static final Action action = Action.VIEW;
+    private final TaskModificationLogBuilder logBuilder;
 
+    private final Action action = Action.DELETE;
 
     @Override
-    public Task getTask(Long targetUserId, Long targetTaskId) {
+    public void deleteTask(Long targetUserId, Long targetTaskId) {
 
         User currentUser = currentUserPort.getCurrentUser();
 
-        TaskReadLogBuilder.ReadTaskContext context = logBuilder.createContext(currentUser,
+        TaskModificationLogBuilder.ModifyTaskContext context = logBuilder.createContext(currentUser,
                 targetUserId,
                 targetTaskId);
 
@@ -59,20 +60,23 @@ public class GetTaskService implements GetTaskUseCase {
 
         }
 
+        else if(!readTaskPort.existsById(targetTaskId)) {
+
+            logBuilder.logTaskNotFound(context, action);
+
+            throw new TaskNotFoundException();
+
+        }
+
         logBuilder.logAccessGranted(context, action);
 
-        Task foundTask = readTaskPort.findById(targetTaskId)
-                .orElseThrow(() -> {
-
-                    logBuilder.logTaskNotFound(context, action);
-
-                    return new TaskNotFoundException();
-
-                });
+        writeTaskPort.deleteTask(targetTaskId);
 
         logBuilder.logSuccess(context, action);
 
-        return foundTask;
 
     }
+
 }
+
+

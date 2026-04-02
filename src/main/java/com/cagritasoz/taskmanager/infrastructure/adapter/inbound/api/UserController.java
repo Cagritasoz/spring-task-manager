@@ -81,13 +81,5 @@ public class UserController {
         changeUserEndpointAdapter.deleteUser(id);
 
         return ResponseEntity.noContent().build();
-
     }
-
-
-
-
-
-
-
 }

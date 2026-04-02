@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UserReadHandler { //Get services use it.
+public class UserReadLogBuilder { //Get services use it.
 
     private final LoggerPort loggerPort;
 
