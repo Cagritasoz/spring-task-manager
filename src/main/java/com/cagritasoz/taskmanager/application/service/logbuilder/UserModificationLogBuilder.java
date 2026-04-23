@@ -1,4 +1,4 @@
-package com.cagritasoz.taskmanager.application.service.handler;
+package com.cagritasoz.taskmanager.application.service.logbuilder;
 
 import com.cagritasoz.taskmanager.application.ports.outbound.LoggerPort;
 import com.cagritasoz.taskmanager.domain.model.Action;

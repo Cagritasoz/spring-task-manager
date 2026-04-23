@@ -3,7 +3,7 @@ package com.cagritasoz.taskmanager.application.service;
 import com.cagritasoz.taskmanager.application.ports.inbound.GetUsersUseCase;
 import com.cagritasoz.taskmanager.application.ports.outbound.CurrentUserPort;
 import com.cagritasoz.taskmanager.application.ports.outbound.ReadUserPort;
-import com.cagritasoz.taskmanager.application.service.handler.UserReadLogBuilder;
+import com.cagritasoz.taskmanager.application.service.logbuilder.UserReadLogBuilder;
 import com.cagritasoz.taskmanager.domain.model.Action;
 import com.cagritasoz.taskmanager.domain.model.Pagination;
 import com.cagritasoz.taskmanager.domain.model.User;

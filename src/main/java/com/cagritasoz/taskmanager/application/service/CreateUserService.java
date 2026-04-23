@@ -2,7 +2,7 @@ package com.cagritasoz.taskmanager.application.service;
 
 import com.cagritasoz.taskmanager.application.ports.inbound.CreateUserUseCase;
 import com.cagritasoz.taskmanager.application.ports.outbound.*;
-import com.cagritasoz.taskmanager.application.service.handler.UserCreationLogBuilder;
+import com.cagritasoz.taskmanager.application.service.logbuilder.UserCreationLogBuilder;
 import com.cagritasoz.taskmanager.domain.exception.EmailAlreadyExistsException;
 import com.cagritasoz.taskmanager.domain.model.Action;
 import com.cagritasoz.taskmanager.domain.model.User;

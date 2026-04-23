@@ -2,7 +2,7 @@ package com.cagritasoz.taskmanager.application.service;
 
 import com.cagritasoz.taskmanager.application.ports.inbound.UpdateUserUseCase;
 import com.cagritasoz.taskmanager.application.ports.outbound.*;
-import com.cagritasoz.taskmanager.application.service.handler.UserModificationLogBuilder;
+import com.cagritasoz.taskmanager.application.service.logbuilder.UserModificationLogBuilder;
 import com.cagritasoz.taskmanager.domain.exception.ForbiddenException;
 import com.cagritasoz.taskmanager.domain.exception.UserNotFoundException;
 import com.cagritasoz.taskmanager.domain.model.Action;

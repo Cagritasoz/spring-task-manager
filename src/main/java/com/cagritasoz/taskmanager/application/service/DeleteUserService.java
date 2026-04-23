@@ -4,7 +4,7 @@ import com.cagritasoz.taskmanager.application.ports.inbound.DeleteUserUseCase;
 import com.cagritasoz.taskmanager.application.ports.outbound.CurrentUserPort;
 import com.cagritasoz.taskmanager.application.ports.outbound.ReadUserPort;
 import com.cagritasoz.taskmanager.application.ports.outbound.WriteUserPort;
-import com.cagritasoz.taskmanager.application.service.handler.UserModificationLogBuilder;
+import com.cagritasoz.taskmanager.application.service.logbuilder.UserModificationLogBuilder;
 import com.cagritasoz.taskmanager.domain.exception.ForbiddenException;
 import com.cagritasoz.taskmanager.domain.exception.UserNotFoundException;
 import com.cagritasoz.taskmanager.domain.model.Action;

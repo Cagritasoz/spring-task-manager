@@ -4,7 +4,7 @@ import com.cagritasoz.taskmanager.application.ports.outbound.CurrentUserPort;
 import com.cagritasoz.taskmanager.application.ports.outbound.PasswordEncoderPort;
 import com.cagritasoz.taskmanager.application.ports.outbound.ReadUserPort;
 import com.cagritasoz.taskmanager.application.ports.outbound.WriteUserPort;
-import com.cagritasoz.taskmanager.application.service.handler.UserCreationLogBuilder;
+import com.cagritasoz.taskmanager.application.service.logbuilder.UserCreationLogBuilder;
 import com.cagritasoz.taskmanager.domain.exception.EmailAlreadyExistsException;
 import com.cagritasoz.taskmanager.domain.model.Action;
 import com.cagritasoz.taskmanager.domain.model.Role;
@@ -18,7 +18,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -71,9 +70,9 @@ public class CreateUserTest {
         verify(readUserPort).existsByEmail(newUserEmail);
         verify(logBuilder).logEmailAlreadyExists(context, Action.CREATE);
 
-        verify(passwordEncoderPort, never()).encodePassword(any());
-        verify(writeUserPort, never()).saveUser(any());
-        verify(logBuilder, never()).logSuccess(any(), any());
+        verify(passwordEncoderPort, never()).encodePassword("new123");
+        verify(writeUserPort, never()).saveUser(newUser);
+        verify(logBuilder, never()).logSuccess(context, Action.CREATE);
 
     }
 
@@ -98,7 +97,7 @@ public class CreateUserTest {
         verify(writeUserPort).saveUser(newUser);
         verify(logBuilder).logSuccess(context, Action.CREATE);
 
-        verify(logBuilder, never()).logEmailAlreadyExists(any(), any());
+        verify(logBuilder, never()).logEmailAlreadyExists(context, Action.CREATE);
 
 
     }

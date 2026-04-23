@@ -4,7 +4,7 @@ import com.cagritasoz.taskmanager.application.ports.inbound.GetTasksUseCase;
 import com.cagritasoz.taskmanager.application.ports.outbound.CurrentUserPort;
 import com.cagritasoz.taskmanager.application.ports.outbound.ReadTaskPort;
 import com.cagritasoz.taskmanager.application.ports.outbound.ReadUserPort;
-import com.cagritasoz.taskmanager.application.service.handler.TaskReadLogBuilder;
+import com.cagritasoz.taskmanager.application.service.logbuilder.TaskReadLogBuilder;
 import com.cagritasoz.taskmanager.domain.exception.ForbiddenException;
 import com.cagritasoz.taskmanager.domain.exception.UserNotFoundException;
 import com.cagritasoz.taskmanager.domain.model.*;
